@@ -1,0 +1,38 @@
+name: RDP with GNOME (Insecure Test)
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Install XRDP and GNOME
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y xrdp xorgxrdp gnome-shell dbus-x11
+
+    - name: Configure XRDP for GNOME
+      run: |
+        sudo sed -i 's/^#DefaultDesktop/DefaultDesktop/' /etc/xrdp/xrdp.ini
+        sudo sed -i 's/^#SessionDesktop/SessionDesktop=gnome/' /etc/xrdp/xrdp.ini
+
+    - name: Create user and set password
+      run: |
+        sudo adduser test --disabled-password --gecos ""
+        echo "test:test1234" | sudo chpasswd
+
+    - name: Start XRDP service
+      run: |
+        sudo systemctl enable xrdp
+        sudo systemctl start xrdp
+
+    - name: Download ngrok for Linux
+      run: |
+        wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
+        tar -xf ngrok-v3-stable-linux-amd64.tgz
+
+    - name: Authenticate ngrok and start tunnel
+      run: |
+        ./ngrok authtoken 1sexnbULPxa5yDKR7xImFKqCg8o_335Laer65GytXuseDwNEH
+        ./ngrok tcp 3389
