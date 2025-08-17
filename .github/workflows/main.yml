@@ -1,4 +1,4 @@
-name: RDP with XFCE (Insecure)
+name: RDP with GNOME (Insecure Test)
 
 on: [push, workflow_dispatch]
 
@@ -7,16 +7,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install XRDP and XFCE
+    - name: Install XRDP and GNOME
       run: |
         sudo apt-get update
-        sudo apt-get install -y xrdp xorgxrdp xfce4
+        sudo apt-get install -y xrdp xorgxrdp gnome-shell dbus-x11
 
-    - name: Configure XRDP for XFCE
+    - name: Configure XRDP for GNOME
       run: |
-        echo "xfce4-session" | tee -a ~/.xsession
         sudo sed -i 's/^#DefaultDesktop/DefaultDesktop/' /etc/xrdp/xrdp.ini
-        sudo sed -i 's/^#SessionDesktop/SessionDesktop=xfce/' /etc/xrdp/xrdp.ini
+        sudo sed -i 's/^#SessionDesktop/SessionDesktop=gnome/' /etc/xrdp/xrdp.ini
 
     - name: Create user and set password
       run: |
@@ -35,5 +34,5 @@ jobs:
 
     - name: Authenticate ngrok and start tunnel
       run: |
-        ./ngrok authtoken YOUR_NGROK_AUTH_TOKEN_HERE
+        ./ngrok authtoken 1sexnbULPxa5yDKR7xImFKqCg8o_335Laer65GytXuseDwNEH
         ./ngrok tcp 3389
