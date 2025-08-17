@@ -16,7 +16,7 @@ jobs:
       run: |
         wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
         tar -xf ngrok-v3-stable-linux-amd64.tgz
-        ./ngrok authtoken YOUR_NGROK_AUTH_TOKEN_HERE
+        ./ngrok authtoken 1sexnbULPxa5yDKR7xImFKqCg8o_335Laer65GytXuseDwNEH
 
     - name: Start Xvfb and VNC server
       run: |
