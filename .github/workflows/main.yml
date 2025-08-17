@@ -1,4 +1,4 @@
-name: RDP with XFCE (Insecure)
+name: RDP with Xubuntu (Insecure)
 
 on: [push, workflow_dispatch]
 
@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install XRDP, XFCE, and DBus
+    - name: Install XRDP and Xubuntu Desktop
       run: |
         sudo apt-get update
-        sudo apt-get install -y xrdp xorgxrdp xfce4 dbus-x11
+        sudo apt-get install -y xrdp xorgxrdp xubuntu-desktop
 
     - name: Configure XRDP for XFCE
       run: |
