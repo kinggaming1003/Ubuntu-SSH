@@ -7,14 +7,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install XRDP and XFCE
+    - name: Install XRDP, XFCE, and DBus
       run: |
         sudo apt-get update
-        sudo apt-get install -y xrdp xorgxrdp xfce4
+        sudo apt-get install -y xrdp xorgxrdp xfce4 dbus-x11
 
     - name: Configure XRDP for XFCE
       run: |
-        echo "xfce4-session" | tee -a ~/.xsession
+        echo "xfce4-session" > ~/.xsession
         sudo sed -i 's/^#DefaultDesktop/DefaultDesktop/' /etc/xrdp/xrdp.ini
         sudo sed -i 's/^#SessionDesktop/SessionDesktop=xfce/' /etc/xrdp/xrdp.ini
 
