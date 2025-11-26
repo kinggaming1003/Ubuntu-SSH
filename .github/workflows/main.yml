@@ -1,26 +1,55 @@
-name: VNC with Xfce and Xvfb
+name: Ubuntu SSH
 
-on: [push, workflow_dispatch]
+on: 
+  workflow_dispatch:
+    inputs:
+      authuncationcode:
+        description: 'DISPLAY= /opt/google/chrome-remote-desktop/start-host --code="4/0Ab32j93xJ80N6jCZ-Mw6ohcdUCQgffNPjfrEsf3NuJNbx8nl9MCG_j-wPKSFzh8LQIxR7A" --redirect-url="https://remotedesktop.google.com/_/oauthredirect" --name=$(hostname)'
+        required: true
+      pin:
+        description: '123456)'
+        required: true
+      authtoken:
+        description: '1sexnbULPxa5yDKR7xImFKqCg8o_335Laer65GytXuseDwNEH'
+        required: true
+      computername:
+        description: 'MACHINE NAME'
+        default: 'ubuntu'
+        required: true
+      username:
+        description: 'USERNAME'
+        default: 'user'
+        required: true
+      password:
+        description: 'USER PASSWORD'
+        default: 'root'
+        required: true
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Install VNC, Xvfb, and Xfce
+    - uses: actions/checkout@v3.0.2
+    - name: Mask Code & Pin.
+      run: |
+        _Token=$(jq -r '.inputs.authtoken' $GITHUB_EVENT_PATH)
+        _CName=$(jq -r '.inputs.computername' $GITHUB_EVENT_PATH)
+        _Pass=$(jq -r '.inputs.password' $GITHUB_EVENT_PATH)
+        echo ::add-mask::$_Token
+        echo ::add-mask::$_CName
+        echo ::add-mask::$_Pass
+        echo NGROK_TOKEN="$_Token" >> $GITHUB_ENV
+        echo ComputerName="$_CName" >> $GITHUB_ENV
+        echo Password="$_Pass" >> $GITHUB_ENV
+    - name: Setup Environment
       run: |
         sudo apt-get update
-        sudo apt-get install -y x11vnc xvfb xfce4 xfce4-terminal dbus-x11
-
-    - name: Download and auth ngrok
-      run: |
-        wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
-        tar -xf ngrok-v3-stable-linux-amd64.tgz
-        ./ngrok authtoken 1sexnbULPxa5yDKR7xImFKqCg8o_335Laer65GytXuseDwNEH
-
-    - name: Start Xvfb and VNC server
-      run: |
-        /usr/bin/Xvfb :99 -screen 0 1024x768x24 &
-        sleep 3
-        x11vnc -display :99 -forever -notls -shared -viewonly &
-        ./ngrok tcp 5900
+        bash Setup.sh "${{ env.NGROK_TOKEN }}" "${{ env.ComputerName }}" "${{ github.event.inputs.username }}" "${{ env.Password }}"
+    - name: IP for Connect to your SSH.
+      run: bash Ip.sh "${{ github.event.inputs.username }}"
+    - name: Keep Alive.
+      run: ping 127.0.0.1 > null
