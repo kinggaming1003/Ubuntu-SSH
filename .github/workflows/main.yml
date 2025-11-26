@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       authuncationcode:
-        description: 'DISPLAY= /opt/google/chrome-remote-desktop/start-host --code="4/0Ab32j93xJ80N6jCZ-Mw6ohcdUCQgffNPjfrEsf3NuJNbx8nl9MCG_j-wPKSFzh8LQIxR7A" --redirect-url="https://remotedesktop.google.com/_/oauthredirect" --name=$(hostname)'
+        description: 'Visit http://remotedesktop.google.com/headless and copy the command after Authentication'
         required: true
       pin:
-        description: '123456)'
+        description: 'Enter a Pin (more or equal to 6 digits)'
         required: true
       authtoken:
-        description: '1sexnbULPxa5yDKR7xImFKqCg8o_335Laer65GytXuseDwNEH'
+        description: 'NGROK AUTH TOKEN'
         required: true
       computername:
         description: 'MACHINE NAME'
