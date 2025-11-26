@@ -1,16 +1,15 @@
-
+name: Remote SSH Command
+on: [push]
 jobs:
-  Ubuntu:
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - run: |
-        sudo apt-get install -y  build-essential automake libtool libevent-dev libncurses5-dev libmsgpack-dev libssh-dev pkg-config
-        autoupdate
-        ACLOCAL_PATH=/usr/share/aclocal ./autogen.sh
-        ./configure
-        make
-        sudo make install
-
-
-
+      - name: Execute remote SSH commands using password
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: linuxserver.io
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: whoami
