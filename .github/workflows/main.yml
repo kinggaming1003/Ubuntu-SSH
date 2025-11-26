@@ -1,3 +1,4 @@
+workflow name: Ubuntu SSH
 
 on: 
   workflow_dispatch:
