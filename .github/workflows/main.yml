@@ -1,27 +1,9 @@
-name: Deploy via SSH
-
-on:
-  push:
-    branches:
-      - main
-
+name: CI
+on: [push]
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Deploy to Server
-        uses: appleboy/ssh-action@master # A popular SSH action
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.ACTIONS_SSH_PRIVATE_KEY }}
-          # port: 22 # Optional, if using a non-standard port
-          # script: |
-          #   cd /var/www/html
-          #   git pull origin main
-          #   npm install
-          #   npm run build
-          #   systemctl restart myapp
+    - uses: actions/checkout@v4
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
