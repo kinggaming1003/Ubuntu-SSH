@@ -1,4 +1,4 @@
-name: Without public key
+name: CI
 on: [push]
 jobs:
   build:
